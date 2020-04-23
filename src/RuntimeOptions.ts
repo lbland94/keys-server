@@ -6,6 +6,8 @@ export class RuntimeOptions {
   public file = 'i18n/en-us.json';
   public port = 4502;
   public shorten = false;
+  public feature = '';
+  public value: null|boolean = null;
 
   /**
    * @param options - Variable passed in from output of `node-getopt` parsing.
@@ -20,6 +22,8 @@ export class RuntimeOptions {
           this[key] = options[key];
         } else if (typeof this[key] === 'boolean' && typeof options[key] === 'boolean') {
           this[key] = options[key];
+        } else if (this[key] === null && typeof options[key] === 'string') {
+          this[key] = options[key].toString().toLowerCase() === 'true';
         }
       }
     }

@@ -12,6 +12,8 @@ class RuntimeOptions {
         this.file = 'i18n/en-us.json';
         this.port = 4502;
         this.shorten = false;
+        this.feature = '';
+        this.value = null;
         for (const key in options) {
             if (this[key] !== undefined && options[key] !== undefined) {
                 if (typeof this[key] === 'number' && typeof options[key] === 'string' && options[key] !== ''
@@ -23,6 +25,9 @@ class RuntimeOptions {
                 }
                 else if (typeof this[key] === 'boolean' && typeof options[key] === 'boolean') {
                     this[key] = options[key];
+                }
+                else if (this[key] === null && typeof options[key] === 'string') {
+                    this[key] = options[key].toString().toLowerCase() === 'true';
                 }
             }
         }

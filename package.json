@@ -1,6 +1,6 @@
 {
   "name": "keys-server",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
@@ -16,13 +16,16 @@
     "@types/express": "^4.17.1",
     "@types/lodash": "^4.14.139",
     "@types/node-getopt": "^0.2.31",
+    "@types/sqlite3": "^3.1.6",
     "ts-node": "^8.4.1",
     "typescript": "^3.6.3"
   },
   "dependencies": {
+    "axios": "^0.19.2",
     "express": "^4.17.1",
     "lodash": "^4.17.15",
     "node-getopt": "^0.3.2",
-    "self-reload-json": "^0.4.0"
+    "self-reload-json": "^0.4.0",
+    "sqlite3": "^4.1.1"
   }
 }
