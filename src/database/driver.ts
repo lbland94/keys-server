@@ -37,10 +37,13 @@ export class AppFeaturesDriver {
   async deleteFeature(name: string) {
     return new Promise((res, rej) => {
       const deleteSql = 'DELETE from appFeatures WHERE name = (?)';
-      db.run(deleteSql, [name], (err) => {
+      db.run(deleteSql, [name], function (err) {
         if (err) {
           rej(err);
           return;
+        }
+        if (this.changes < 1) {
+          rej({message: 'No rows deleted.'});
         }
         res();
       })

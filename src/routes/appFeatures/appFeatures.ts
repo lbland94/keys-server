@@ -18,35 +18,50 @@ export const appFeatures = (req: Request, res: Response) => {
       }
       res.json(response.data);
     });
-  }).catch((e) => console.log('error fetching keys'));
+  }).catch((e) => {
+    console.log('error fetching keys');
+    res.status(500).json({status: 'failed', message: 'error fetching keys'});
+  });
 };
 
 appFeaturesRouter.get('/', appFeatures);
 
+appFeaturesRouter.get('/overrides', (req: Request, res: Response) => {
+  appFeaturesDriver.getFeatures().then(features => {
+    const featuresObj = {};
+    features.forEach(val => {
+      featuresObj[val.name] = val.value;
+    });
+    res.json(features);
+  }).catch((e) => {
+    console.log('error fetching keys');
+    res.status(500).json({status: 'failed', message: 'error fetching keys'});
+  });
+});
+
 appFeaturesRouter.delete('/:name', (req: Request, res: Response) => {
   appFeaturesDriver.deleteFeature(req.params.name).then(() => {
-    res.status(201).send();
+    res.status(204).send();
   }).catch((err) => {
-    res.status(400).json({'status': 'failed', 'message': err.message});
+    res.status(400).json({ 'status': 'failed', 'message': err.message });
   });
 });
 
 appFeaturesRouter.get('/:name', (req: Request, res: Response) => {
   appFeaturesDriver.getFeatures().then((features) => {
     const feature = features.filter(val => val.name === req.params.name).pop();
-    res.json({[req.params.name]: feature && feature.value});
+    res.json({ [req.params.name]: feature && feature.value });
   }).catch(err => {
-    res.status(400).json({'status': 'failed', 'message': err.message});
+    res.status(400).json({ 'status': 'failed', 'message': err.message });
   });
 });
 
 appFeaturesRouter.post('/:name', (req: Request, res: Response) => {
-  console.log(req.body);
   if (req.body && req.body.value) {
     appFeaturesDriver.setFeature(req.params.name, req.body.value).then(() => {
       res.status(201).send();
     }).catch(err => {
-      res.status(400).json({'status': 'failed', 'message': err.message});
+      res.status(400).json({ 'status': 'failed', 'message': err.message });
     });
   } else {
     res.status(400).send();
