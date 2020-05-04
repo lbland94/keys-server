@@ -19,12 +19,27 @@ exports.appFeatures = (req, res) => {
             }
             res.json(response.data);
         });
-    }).catch((e) => console.log('error fetching keys'));
+    }).catch((e) => {
+        console.log('error fetching keys');
+        res.status(500).json({ status: 'failed', message: 'error fetching keys' });
+    });
 };
 appFeaturesRouter.get('/', exports.appFeatures);
+appFeaturesRouter.get('/overrides', (req, res) => {
+    driver_1.default.getFeatures().then(features => {
+        const featuresObj = {};
+        features.forEach(val => {
+            featuresObj[val.name] = val.value;
+        });
+        res.json(features);
+    }).catch((e) => {
+        console.log('error fetching keys');
+        res.status(500).json({ status: 'failed', message: 'error fetching keys' });
+    });
+});
 appFeaturesRouter.delete('/:name', (req, res) => {
     driver_1.default.deleteFeature(req.params.name).then(() => {
-        res.status(201).send();
+        res.status(204).send();
     }).catch((err) => {
         res.status(400).json({ 'status': 'failed', 'message': err.message });
     });
@@ -38,8 +53,7 @@ appFeaturesRouter.get('/:name', (req, res) => {
     });
 });
 appFeaturesRouter.post('/:name', (req, res) => {
-    console.log(req.body);
-    if (req.body && req.body.value) {
+    if (req.body && req.body.value !== undefined) {
         driver_1.default.setFeature(req.params.name, req.body.value).then(() => {
             res.status(201).send();
         }).catch(err => {

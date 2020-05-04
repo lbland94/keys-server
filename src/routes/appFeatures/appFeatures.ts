@@ -57,7 +57,7 @@ appFeaturesRouter.get('/:name', (req: Request, res: Response) => {
 });
 
 appFeaturesRouter.post('/:name', (req: Request, res: Response) => {
-  if (req.body && req.body.value) {
+  if (req.body && req.body.value !== undefined) {
     appFeaturesDriver.setFeature(req.params.name, req.body.value).then(() => {
       res.status(201).send();
     }).catch(err => {

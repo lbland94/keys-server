@@ -50,10 +50,13 @@ class AppFeaturesDriver {
         return __awaiter(this, void 0, void 0, function* () {
             return new Promise((res, rej) => {
                 const deleteSql = 'DELETE from appFeatures WHERE name = (?)';
-                database_1.db.run(deleteSql, [name], (err) => {
+                database_1.db.run(deleteSql, [name], function (err) {
                     if (err) {
                         rej(err);
                         return;
+                    }
+                    if (this.changes < 1) {
+                        rej({ message: 'No rows deleted.' });
                     }
                     res();
                 });
