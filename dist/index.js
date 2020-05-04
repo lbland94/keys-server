@@ -13,6 +13,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const body_parser_1 = __importDefault(require("body-parser"));
+const cors_1 = __importDefault(require("cors"));
 const JsonWatcher = require('self-reload-json');
 const node_getopt_1 = __importDefault(require("node-getopt"));
 const RuntimeOptions_1 = require("./RuntimeOptions");
@@ -48,6 +49,7 @@ if (runtimeOpts.feature || runtimeOpts.value !== null) {
 else {
     const keys = new JsonWatcher(runtimeOpts.file);
     const app = express_1.default();
+    app.use(cors_1.default());
     app.use(body_parser_1.default.json());
     app.get('/content/www-api/en-us/panerabread_com/_jcr_content/root.json', appFeatures_1.appFeatures);
     app.use('/v1/appFeatures', appFeatures_1.default);

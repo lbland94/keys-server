@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import express from 'express';
 import bodyParser from 'body-parser';
+import cors from 'cors';
 const JsonWatcher = require('self-reload-json');
 import Getopt from 'node-getopt';
 import { RuntimeOptions } from './RuntimeOptions';
@@ -38,7 +39,8 @@ if (runtimeOpts.feature || runtimeOpts.value !== null) {
   const keys = new JsonWatcher(runtimeOpts.file);
   
   const app = express();
-  
+
+  app.use(cors());
   app.use(bodyParser.json());
   app.get('/content/www-api/en-us/panerabread_com/_jcr_content/root.json', appFeatures);
   app.use('/v1/appFeatures', appFeaturesRouter);

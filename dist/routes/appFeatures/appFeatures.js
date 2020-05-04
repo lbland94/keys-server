@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const axios_1 = __importDefault(require("axios"));
 const driver_1 = __importDefault(require("../../database/driver"));
 const express_1 = __importDefault(require("express"));
+const path_1 = __importDefault(require("path"));
 const appFeaturesRouter = express_1.default.Router();
 exports.default = appFeaturesRouter;
 exports.appFeatures = (req, res) => {
@@ -25,6 +26,10 @@ exports.appFeatures = (req, res) => {
     });
 };
 appFeaturesRouter.get('/', exports.appFeatures);
+appFeaturesRouter.use('/ui/*', (req, res, next) => {
+    const p = req.params[0] ? req.params[0] : 'index.html';
+    res.sendFile(p, { root: path_1.default.join(__dirname, '../../ui') });
+});
 appFeaturesRouter.get('/overrides', (req, res) => {
     driver_1.default.getFeatures().then(features => {
         const featuresObj = {};

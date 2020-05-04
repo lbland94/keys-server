@@ -1,7 +1,8 @@
 import axios, { AxiosResponse } from 'axios';
-import { Response, Request } from 'express';
+import { Response, Request, NextFunction } from 'express';
 import appFeaturesDriver from '../../database/driver';
 import express from 'express';
+import path from 'path';
 
 const appFeaturesRouter = express.Router();
 
@@ -25,6 +26,11 @@ export const appFeatures = (req: Request, res: Response) => {
 };
 
 appFeaturesRouter.get('/', appFeatures);
+
+appFeaturesRouter.use('/ui/*', (req: Request, res: Response, next: NextFunction) => {
+  const p = req.params[0] ? req.params[0] : 'index.html';
+  res.sendFile(p, {root: path.join(__dirname, '../../ui')});
+});
 
 appFeaturesRouter.get('/overrides', (req: Request, res: Response) => {
   appFeaturesDriver.getFeatures().then(features => {
